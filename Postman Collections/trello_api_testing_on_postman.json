@@ -1,0 +1,3942 @@
+{
+	"info": {
+		"_postman_id": "e0cc6744-a175-419f-9ebb-ddbdbd8acd02",
+		"name": "Trello API Testing",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Board",
+			"item": [
+				{
+					"name": "Positive Scenario",
+					"item": [
+						{
+							"name": "Auth",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "34b5e578-1692-4aff-ac8d-29ff385c7a2b",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"const schema = {",
+											"    \"type\": \"array\",",
+											"    \"properties\": {",
+											"        \"id\": { \"type\": \"string\" }",
+											"    }",
+											"};",
+											"",
+											"pm.test(\"Validate schema\", () => {",
+											"    pm.response.to.have.jsonSchema(schema);",
+											"});",
+											"",
+											"pm.test(\"Saving id\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.environment.set(\"member_id\", jsonData[0].id);",
+											"",
+											"    let member_id = pm.variables.get(\"member_id\");",
+											"    const schema = {",
+											"    \"type\": \"string\"",
+											"};",
+											"    console.log(member_id);",
+											"   ",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "790a3d9f-b4ca-4a2f-97c1-1b5d89edc40f",
+										"exec": [
+											"pm.environment.set(\"key\", \"5daedec879ac842ab08d0b7d39d43e73\");"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "ba146c1f-bc07-4b47-bcf4-040bf6034c9b",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": {
+										"value": "{{token}}",
+										"key": "{{key}}",
+										"in": "query"
+									}
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/members/me/boards?key={{key}}&token={{token}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"members",
+										"me",
+										"boards"
+									],
+									"query": [
+										{
+											"key": "key",
+											"value": "{{key}}"
+										},
+										{
+											"key": "token",
+											"value": "{{token}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create a Board 2",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "77094476-de20-4704-8225-5a2585c376b4",
+										"exec": [
+											"let _name = pm.variables.replaceIn('{{$randomCatchPhrase}}');",
+											"pm.environment.set(\"boardName\", _name);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "9e69c5f9-7239-4122-aebb-60784b36ba6d",
+										"exec": [
+											"pm.test(\"Response time is less than 200ms\", function () {",
+											"    pm.expect(pm.response.responseTime).to.be.below(200);",
+											"});",
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"pm.test(\"Check the id of the response\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    console.log(jsonData.id);",
+											"    pm.environment.set(\"boardId\",jsonData.id);",
+											"",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "60cdcc39-069d-49e0-a6e7-a4fd05115afe",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/boards/?name=javiBoard&Key=bc0dc17b242b43e1b1b41fe5de554fc6&Token=ATTA6ea37a53a7f3f6ec4ca606ecc2a95598cd672380d72b2d4e144513937d0326ffA1EF282C",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										""
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "javiBoard"
+										},
+										{
+											"key": "Key",
+											"value": "bc0dc17b242b43e1b1b41fe5de554fc6"
+										},
+										{
+											"key": "Token",
+											"value": "ATTA6ea37a53a7f3f6ec4ca606ecc2a95598cd672380d72b2d4e144513937d0326ffA1EF282C"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get the Board Created",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "dd29fe67-3317-43a7-b8f3-19c5e76c8cde",
+										"exec": [
+											"",
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Check that the name is correct\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.name).to.eql(pm.environment.get('boardName'));",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "6e226952-3dfe-482d-a335-bfaf66ae021e",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": {}
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/boards/{{boardId}}?key={{key}}&token={{token}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										"{{boardId}}"
+									],
+									"query": [
+										{
+											"key": "key",
+											"value": "{{key}}"
+										},
+										{
+											"key": "token",
+											"value": "{{token}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Board name",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "06d2506e-2d94-4ee4-97a4-1a524d0fcb7a",
+										"exec": [
+											"let _boardName = pm.environment.get(\"boardName\");",
+											"",
+											"",
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"pm.test(\"Updated name equals name\", function () {",
+											"    var jsonData = pm.response.json();",
+											"",
+											"    pm.expect(jsonData.name).to.eql(_boardName);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "3221cbcf-f746-45cf-8e13-97dc6c58d9fb",
+										"exec": [
+											"let _name = pm.variables.replaceIn('{{$randomCatchPhrase}}');",
+											"pm.environment.set(\"boardName\", _name);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "08a966e6-2343-4954-a4bb-843a923a312b",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\":\"{{boardName}}\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://api.trello.com/1/boards/:id?key={{key}}&token={{token}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										":id"
+									],
+									"query": [
+										{
+											"key": "key",
+											"value": "{{key}}"
+										},
+										{
+											"key": "token",
+											"value": "{{token}}"
+										},
+										{
+											"key": "name",
+											"value": "{{boardName}}",
+											"disabled": true
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{boardId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update board desc",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "6fbd8170-ad92-4740-9b2a-532b674b838f",
+										"exec": [
+											"let _boardDesc = pm.variables.replaceIn('{{$randomCatchPhrase}}');",
+											"pm.environment.set(\"boardDesc\", _boardDesc);",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "691590cf-7738-4d32-9f2b-9932e0ab870f",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Your test name\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    let _boardDesc = pm.environment.get(\"boardDesc\");",
+											"    pm.expect(jsonData.desc).to.eql(_boardDesc);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "cc263e4b-a857-4214-aac9-7a9f95c0ac07",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/boards/{{boardId}}?key={{key}}&token={{token}}&desc={{boardDesc}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										"{{boardId}}"
+									],
+									"query": [
+										{
+											"key": "key",
+											"value": "{{key}}"
+										},
+										{
+											"key": "token",
+											"value": "{{token}}"
+										},
+										{
+											"key": "desc",
+											"value": "{{boardDesc}}",
+											"type": "text"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Board various fields",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "1237990b-5f71-4616-9050-3cc0579b1886",
+										"exec": [
+											"let _boardDesc = pm.variables.replaceIn('{{$randomCatchPhrase}}');",
+											"pm.environment.set(\"boardDesc\", _boardDesc);",
+											"pm.environment.set(\"boardClosed\",true);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "8a237eb7-02a6-4d05-9805-384e89e908e5",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Checking that the name is ok\", function () {",
+											"    var jsonData = pm.response.json();",
+											"",
+											"    let _boardName = pm.environment.get(\"boardName\");",
+											"    pm.expect(jsonData.name).to.eql(_boardName);",
+											"});",
+											"",
+											"pm.test(\"Checking that the card is cloosed\", function () {",
+											"    var jsonData = pm.response.json();",
+											"",
+											"    let _boardClosed = pm.environment.get(\"boardClosed\");",
+											"    pm.expect(jsonData.closed).to.eql(_boardClosed);",
+											"});",
+											"",
+											"pm.test(\"Checking that the card desc is ok\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    let _boardDesc = pm.environment.get(\"boardDesc\");",
+											"    pm.expect(jsonData.desc).to.eql(_boardDesc);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "7b4256a2-d4ad-4591-8118-ff1f2ad769bb",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\":\"{{boardName}}\",\n    \"desc\": \"{{boardDesc}}\",\n    \"closed\" : \"{{boardClosed}}\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://api.trello.com/1/boards/{{boardId}}?key={{key}}&token={{token}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										"{{boardId}}"
+									],
+									"query": [
+										{
+											"key": "key",
+											"value": "{{key}}"
+										},
+										{
+											"key": "token",
+											"value": "{{token}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Board with no fields",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "3047aaa7-b76d-47c8-8452-73c89a132e4a",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "1a3f3c91-5270-4a9f-b7a3-29b07996efd5",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://api.trello.com/1/boards/{{boardId}}?key={{key}}&token={{token}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										"{{boardId}}"
+									],
+									"query": [
+										{
+											"key": "key",
+											"value": "{{key}}"
+										},
+										{
+											"key": "token",
+											"value": "{{token}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get updated board",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "9104872b-97df-4c34-8033-14c45ad49709",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Checking that the name is ok\", function () {",
+											"    var jsonData = pm.response.json();",
+											"",
+											"    let _boardName = pm.environment.get(\"boardName\");",
+											"    pm.expect(jsonData.name).to.eql(_boardName);",
+											"});",
+											"",
+											"pm.test(\"Checking that the card is cloosed\", function () {",
+											"    var jsonData = pm.response.json();",
+											"",
+											"    let _boardClosed = pm.environment.get(\"boardClosed\");",
+											"    pm.expect(jsonData.closed).to.eql(_boardClosed);",
+											"});",
+											"",
+											"pm.test(\"Checking that the card desc is ok\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    let _boardDesc = pm.environment.get(\"boardDesc\");",
+											"    pm.expect(jsonData.desc).to.eql(_boardDesc);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "debf8559-813a-4faa-8122-ee6c8220fc7c",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/boards/{{boardId}}?key={{key}}&token={{token}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										"{{boardId}}"
+									],
+									"query": [
+										{
+											"key": "key",
+											"value": "{{key}}"
+										},
+										{
+											"key": "token",
+											"value": "{{token}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get desc of a board",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "3da57b4f-4364-4ad2-9333-ecb22afd2db2",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Your test name\", function () {",
+											"    var jsonData = pm.response.json();",
+											"",
+											"    var boardDesc = pm.environment.get(\"boardDesc\");",
+											"    pm.expect(jsonData._value).to.eql(boardDesc);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "069e0966-9b8e-45a2-a1cb-d20742dcab94",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/boards/{{boardId}}/desc?key={{key}}&token={{token}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										"{{boardId}}",
+										"desc"
+									],
+									"query": [
+										{
+											"key": "key",
+											"value": "{{key}}"
+										},
+										{
+											"key": "token",
+											"value": "{{token}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create List on a Board",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "5f1b661b-1bfa-4064-8189-1a7d68535085",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"",
+											"const schema = {",
+											"    \"type\": \"object\",",
+											"    \"properties\": {",
+											"        \"id\": { \"type\": \"string\" }",
+											"    }",
+											"};",
+											"",
+											"",
+											"pm.test(\"Validate schema is an objetc\", () => {",
+											"    pm.response.to.have.jsonSchema(schema);",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "f14ce685-c160-4eb5-9b07-a163305e3216",
+										"exec": [
+											"let _listName = pm.variables.replaceIn('{{$randomCatchPhrase}}');",
+											"pm.environment.set(\"listName\", _listName);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "9d2b271b-8108-4ed0-9654-7620b24815ef",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/boards/:id/lists?name={{listName}}&key={{key}}&token={{token}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										":id",
+										"lists"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "{{listName}}"
+										},
+										{
+											"key": "key",
+											"value": "{{key}}"
+										},
+										{
+											"key": "token",
+											"value": "{{token}}"
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{boardId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Lists on the Board",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "d66cf194-899a-4f3f-bbb7-1c36bf34342a",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"const schema = {",
+											"    \"type\": \"array\",",
+											"    \"properties\": {",
+											"        \"id\": { \"type\": \"string\" }",
+											"    }",
+											"};",
+											"",
+											"pm.test(\"Response to be an array\", () => {",
+											"    pm.response.to.have.jsonSchema(schema);",
+											"});",
+											"",
+											"",
+											"pm.test(\"Check that the idBoard is correct in all lists\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    var rightId = true;",
+											"    var _boardId = pm.environment.get(\"boardId\");",
+											"",
+											"    for(var i=0;i<jsonData.length;i++){",
+											"        var idBoard = jsonData[i].idBoard;",
+											"        rightId =  (idBoard===_boardId);",
+											"        ",
+											"        if(!rightId)",
+											"            break;",
+											"    }",
+											"    pm.expect(rightId).to.eql(true);",
+											"});",
+											"",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "c8fb2195-5994-4e90-8976-76500b0a10ca",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/boards/:id/lists?key={{key}}&token={{token}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										":id",
+										"lists"
+									],
+									"query": [
+										{
+											"key": "key",
+											"value": "{{key}}"
+										},
+										{
+											"key": "token",
+											"value": "{{token}}"
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{boardId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Closed Lists",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "ead119a2-3da7-40bf-a8c3-b149c2e08019",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"No closed List on the board\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.length).to.eql(0);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "8a6af2e2-0b2c-4f8d-9e21-37a17feb1a03",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/boards/{{boardId}}/lists/closed?key={{key}}&token={{token}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										"{{boardId}}",
+										"lists",
+										"closed"
+									],
+									"query": [
+										{
+											"key": "key",
+											"value": "{{key}}"
+										},
+										{
+											"key": "token",
+											"value": "{{token}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create a Label on a Board",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "64f95546-7939-467b-bdc0-5ec4b17b6774",
+										"exec": [
+											"pm.environment.set(\"labelColor\", \"blue\");",
+											"let _labelName = pm.variables.replaceIn('{{$randomCatchPhrase}}');",
+											"pm.environment.set(\"labelName\", _labelName);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "43d92318-d803-45e1-8d19-85e957ece8d5",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"",
+											"pm.test(\"Response have a label id\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    let _labelId = jsonData.id;",
+											"    pm.environment.set(\"labelId\", _labelId);",
+											"    pm.expect(jsonData.id).to.be.a(\"string\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "f6f564fc-0c6a-42c4-9114-72209212b04e",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/boards/{{boardId}}/labels?name={{labelName}}&color={{labelColor}}&key={{key}}&token={{token}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										"{{boardId}}",
+										"labels"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "{{labelName}}"
+										},
+										{
+											"key": "color",
+											"value": "{{labelColor}}"
+										},
+										{
+											"key": "key",
+											"value": "{{key}}"
+										},
+										{
+											"key": "token",
+											"value": "{{token}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get list of Labels",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "40f8bb6e-bc1b-4430-bf05-5347fa930004",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"const schema = {",
+											"    \"type\": \"array\",",
+											"    \"properties\": {",
+											"        \"id\": { \"type\": \"string\" }",
+											"    }",
+											"};",
+											"",
+											"pm.test(\"Response to be an array\", () => {",
+											"    pm.response.to.have.jsonSchema(schema);",
+											"});",
+											"",
+											"",
+											"pm.test(\"Verify that the created label exist on the board\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    let found = false;",
+											"    let _labelid = pm.environment.get(\"labelId\");",
+											"    let _labelname = pm.environment.get(\"labelName\");",
+											"    let _labelcolor = pm.environment.get(\"labelColor\");",
+											"",
+											"    for(var i = 0;i<jsonData.length;i++){",
+											"        let label = jsonData[i];",
+											"        if(label.id===_labelid && label.name===_labelname && label.color === _labelcolor){",
+											"                    found = true;",
+											"                    break;",
+											"",
+											"",
+											"        }",
+											"",
+											"    }",
+											"    pm.expect(found).to.eql(true);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "b2bc7bfe-02eb-4478-801a-38604e2f46a0",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/boards/:id/labels?key={{key}}&token={{token}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										":id",
+										"labels"
+									],
+									"query": [
+										{
+											"key": "key",
+											"value": "{{key}}"
+										},
+										{
+											"key": "token",
+											"value": "{{token}}"
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{boardId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get members of a Board",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "e504dbe5-b25f-48e1-8b2b-7de174c7e8c7",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"const schema = {",
+											"    \"type\": \"array\",",
+											"    \"properties\": {",
+											"        \"id\": { \"type\": \"string\" }",
+											"    }",
+											"};",
+											"",
+											"pm.test(\"Response to be an array\", () => {",
+											"    pm.response.to.have.jsonSchema(schema);",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "8d6b2b76-e8ad-4218-acdc-bb3460ade984",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/boards/{{boardId}}/members?key={{key}}&token={{token}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										"{{boardId}}",
+										"members"
+									],
+									"query": [
+										{
+											"key": "key",
+											"value": "{{key}}"
+										},
+										{
+											"key": "token",
+											"value": "{{token}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create a Calendar Key for a Board",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "b426dcbb-2565-43dd-94e7-ad4d58c3c961",
+										"exec": [
+											"pm.test(\"Status code is 403, user not premium\", function () {",
+											"    pm.response.to.have.status(403);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "6664fdfe-2f91-4e5e-9af9-1e1d9aaf7531",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/boards/{{boardId}}/calendarKey/generate?key={{key}}&token={{token}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										"{{boardId}}",
+										"calendarKey",
+										"generate"
+									],
+									"query": [
+										{
+											"key": "key",
+											"value": "{{key}}"
+										},
+										{
+											"key": "token",
+											"value": "{{token}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Cards on a Board",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "d803a98b-2d3b-427d-a837-df4d9bde4dbb",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"pm.test(\"No cards on the board\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData).to.eql([]);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "207dad46-6dbc-4078-ba64-4c7cbfa34c40",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/boards/:id/cards?key={{key}}&token={{token}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										":id",
+										"cards"
+									],
+									"query": [
+										{
+											"key": "key",
+											"value": "{{key}}"
+										},
+										{
+											"key": "token",
+											"value": "{{token}}"
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{boardId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get List of Cards 2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "8cb2e505-00bb-4750-8b8a-93b74111d4ed",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"pm.test(\"No cards on the board\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.cards).to.eql([]);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "3afde8a0-b489-4402-ab39-ff1d868db586",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/boards/:id?key={{key}}&token={{token}}&cards=all",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										":id"
+									],
+									"query": [
+										{
+											"key": "key",
+											"value": "{{key}}"
+										},
+										{
+											"key": "token",
+											"value": "{{token}}"
+										},
+										{
+											"key": "cards",
+											"value": "all"
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{boardId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete a Board",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "207d11f0-2f89-4bf4-9ad4-88d8aec1f522",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "4cd265f8-3f0e-4271-a88b-821ace704e87",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/boards/{{boardId}}?key={{key}}&token={{token}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										"{{boardId}}"
+									],
+									"query": [
+										{
+											"key": "key",
+											"value": "{{key}}"
+										},
+										{
+											"key": "token",
+											"value": "{{token}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Deleted Board",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "5a7fba79-0063-4c05-8df6-e31884e5fe8e",
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {",
+											"    pm.response.to.have.status(404);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "a758e68b-7526-4ceb-85a4-07e8d5a568af",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/boards/?name={{boardName}}&key={{key}}&token={{token}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										""
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "{{boardName}}"
+										},
+										{
+											"key": "key",
+											"value": "{{key}}"
+										},
+										{
+											"key": "token",
+											"value": "{{token}}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"id": "45071a71-17aa-476d-b7ca-e9896a7c44e9"
+				},
+				{
+					"name": "Negative Scenary ",
+					"item": [
+						{
+							"name": "Create a Board For the test suites.",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "b6163ce8-a811-4689-a7cb-0334d7402d41",
+										"exec": [
+											"let _name = pm.variables.replaceIn('{{$randomCatchPhrase}}');",
+											"pm.environment.set(\"boardName\", _name);",
+											"pm.environment.set(\"invalidToken\", \"asdasdasdsda\");",
+											"pm.environment.set(\"invalidKey\", \"asda123123asd\");"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "c0c40838-f0c8-4bce-951c-4d49543950d5",
+										"exec": [
+											"",
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"pm.test(\"Check the id of the response\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    console.log(jsonData.id);",
+											"    pm.environment.set(\"boardId\",jsonData.id);",
+											"",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "33c4e572-63e7-4fe5-aeee-d85cf5dbe245",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/boards/?name={{boardName}}&key={{key}}&token={{token}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										""
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "{{boardName}}"
+										},
+										{
+											"key": "key",
+											"value": "{{key}}"
+										},
+										{
+											"key": "token",
+											"value": "{{token}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create a Board with no Name",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "0b9ea90b-2dfc-480e-8d60-003fc79733d7",
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"",
+											"pm.test(\"Body matches ERROR\", function () {",
+											"    pm.expect(pm.response.text()).to.include(\"ERROR\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "63d6e0b7-7c4a-47df-8c6e-20973c3692e2",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{dom}}/1/boards/?name=&key={{key}}&token={{token}}",
+									"host": [
+										"{{dom}}"
+									],
+									"path": [
+										"1",
+										"boards",
+										""
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": ""
+										},
+										{
+											"key": "key",
+											"value": "{{key}}"
+										},
+										{
+											"key": "token",
+											"value": "{{token}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create a Board with Invalid Name",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "90dda7ea-c0e8-4eb1-9cce-a57c695d4bc3",
+										"exec": [
+											"let _invalidName = pm.variables.replaceIn('{{$randomFirstName}}');",
+											"for(let i=0;i<2500;i++){",
+											"    _invalidName += pm.variables.replaceIn('{{$randomFirstName}}');",
+											"}",
+											"pm.environment.set(\"invalidBoardName\", _invalidName);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "0b5526c0-20fc-4f2b-bf1e-d38109d72162",
+										"exec": [
+											"pm.test(\"Status code is 431\", function () {",
+											"    pm.response.to.have.status(431);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "9bc9f5a2-a207-48b6-90a5-fd83a177c533",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{dom}}/1/boards/?name={{invalidBoardName}}&key={{key}}&token={{token}}",
+									"host": [
+										"{{dom}}"
+									],
+									"path": [
+										"1",
+										"boards",
+										""
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "{{invalidBoardName}}"
+										},
+										{
+											"key": "key",
+											"value": "{{key}}"
+										},
+										{
+											"key": "token",
+											"value": "{{token}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Board with Invalid Id",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "8317644a-9d61-4d51-9c8e-8ffc7c1c210f",
+										"exec": [
+											"pm.environment.set(\"invalidBoardId\", \"123456789123345678º21º12º12\");"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "db897343-0d84-446b-a595-01933df59fba",
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"",
+											"pm.test(\"Body is correct\", function () {",
+											"    pm.response.to.have.body(\"invalid id\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "f6a682ff-b61a-42a1-9f22-b15ab680c287",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/boards/{{invalidBoardId}}?key={{key}}&token={{token}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										"{{invalidBoardId}}"
+									],
+									"query": [
+										{
+											"key": "key",
+											"value": "{{key}}"
+										},
+										{
+											"key": "token",
+											"value": "{{token}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Unathorized Access Create Board",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "8167fb7f-99d0-48d6-a9ef-214e4e63f9fc",
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "fcdc3c80-8d86-40ee-9c8f-d0e1d89e9576",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/boards/?name={{boardName}}&key=&token=",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										""
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "{{boardName}}"
+										},
+										{
+											"key": "key",
+											"value": ""
+										},
+										{
+											"key": "token",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Unathorized Access Get a Board",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "649e42da-168d-44e8-8e26-f3bc77ec2335",
+										"exec": [
+											"pm.test(\"Status code is 404 or 401\", function () {",
+											"    pm.expect(pm.response.code).to.be.oneOf([404,401]);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "f378d289-c1f7-4b6a-a2b4-36a1440acc24",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/boards/:id?key=&token=",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										":id"
+									],
+									"query": [
+										{
+											"key": "key",
+											"value": ""
+										},
+										{
+											"key": "token",
+											"value": ""
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{boardId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Invalid Token Get a Board",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "1a1c5ce8-b092-40cf-9f00-af99bdd3db2a",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "080a1b53-083b-480b-ad04-3f2f5cb2b353",
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});",
+											"",
+											"pm.test(\"invalid Token\", function () {",
+											"    pm.expect(pm.response.text()).to.include(\"invalid token\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "3b8b83be-6636-4275-a96e-212f16038088",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/boards/:id?key={{key}}&token={{invalidToken}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										":id"
+									],
+									"query": [
+										{
+											"key": "key",
+											"value": "{{key}}"
+										},
+										{
+											"key": "token",
+											"value": "{{invalidToken}}"
+										},
+										{
+											"key": "",
+											"value": null,
+											"type": "text",
+											"disabled": true
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{boardId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get board with no id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "a0efd374-ecd1-46ca-8005-5efb6032f4c5",
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {",
+											"    pm.response.to.have.status(404);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "1739fafc-08a0-46e6-ab26-d46a73c3b17d",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/boards/?key={{key}}&token={{token}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										""
+									],
+									"query": [
+										{
+											"key": "key",
+											"value": "{{key}}"
+										},
+										{
+											"key": "token",
+											"value": "{{token}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Board with  invalid name",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "b601a45d-6abb-4f03-83e7-c0071d1445e8",
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"",
+											"pm.test(\"Have an error message\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.message).to.eql(\"invalid value for name\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "99800cd1-c2a6-431c-9d42-d06024fafd27",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\" : 123\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://api.trello.com/1/boards/:id?key={{key}}&token={{token}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										":id"
+									],
+									"query": [
+										{
+											"key": "key",
+											"value": "{{key}}"
+										},
+										{
+											"key": "token",
+											"value": "{{token}}"
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{boardId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Board with invalid desc",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "466e85e7-f58f-44e3-bba7-7c8652b63637",
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "6d83f1ba-9794-4f25-8b8f-e8029ef2c796",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"desc\" : 123\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://api.trello.com/1/boards/:id?key={{key}}&token={{token}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										":id"
+									],
+									"query": [
+										{
+											"key": "key",
+											"value": "{{key}}"
+										},
+										{
+											"key": "token",
+											"value": "{{token}}"
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{boardId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete a Board with invalid id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "358730cf-ddea-44e6-b6f1-25094857d7f7",
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"pm.test(\"Body with invalid string  \", function () {",
+											"    pm.expect(pm.response.text()).to.include(\"invalid\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "9f397a56-71e9-46bb-b3e8-d6abf03c28b5",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/boards/:id?key={{key}}&token={{token}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										":id"
+									],
+									"query": [
+										{
+											"key": "key",
+											"value": "{{key}}"
+										},
+										{
+											"key": "token",
+											"value": "{{token}}"
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{invalidBoardId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete a Board with invalid Token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "b5bb0755-e2c1-4e61-8508-a30862dfb116",
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "64b9325a-d2ad-43d6-9b72-347ea5a8d14b",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/boards/:id?key={{key}}&token={{invalidToken}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										":id"
+									],
+									"query": [
+										{
+											"key": "key",
+											"value": "{{key}}"
+										},
+										{
+											"key": "token",
+											"value": "{{invalidToken}}"
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{boardId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update a Board with invalid Token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "463b2bff-bff2-4af7-84a9-7d0bf1db2b26",
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "480209d6-e3ec-4ada-a1ad-d71f557505b9",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://api.trello.com/1/boards/:id?key={{key}}&token={{invalidToken}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										":id"
+									],
+									"query": [
+										{
+											"key": "key",
+											"value": "{{key}}"
+										},
+										{
+											"key": "token",
+											"value": "{{invalidToken}}"
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{boardId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create List on Board with invalid Board Id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "528102e8-64e4-41cc-85d3-7305bce606fc",
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"pm.test(\"Body with invalid string  \", function () {",
+											"    pm.expect(pm.response.text()).to.include(\"invalid\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "09362030-f4a6-4bc3-8d25-82987307abd2",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/boards/:id/lists?name={{listName}}&key={{key}}&token={{token}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										":id",
+										"lists"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "{{listName}}"
+										},
+										{
+											"key": "key",
+											"value": "{{key}}"
+										},
+										{
+											"key": "token",
+											"value": "{{token}}"
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{invalidBoardId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create List on a Board with invalid Token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "2c34b7c3-98f6-4489-9acb-0fdd6324fac7",
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});",
+											"",
+											"pm.test(\"Body with invalid string  \", function () {",
+											"    pm.expect(pm.response.text()).to.include(\"invalid\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "f77a6eb5-bef5-49d0-8f4d-48df78435ba1",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/boards/:id/lists?name={{listName}}&key={{key}}&token={{invalidToken}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										":id",
+										"lists"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "{{listName}}"
+										},
+										{
+											"key": "key",
+											"value": "{{key}}"
+										},
+										{
+											"key": "token",
+											"value": "{{invalidToken}}"
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{boardId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create List on a Board with invalid Key",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "01096024-65cb-4771-bbdb-41300c42aec1",
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});",
+											"",
+											"pm.test(\"Body with invalid string  \", function () {",
+											"    pm.expect(pm.response.text()).to.include(\"invalid\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "714c610b-44e9-401c-9bad-653bac5bf15d",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/boards/:id/lists?name={{listName}}&key={{invalidKey}}&token={{token}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										":id",
+										"lists"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "{{listName}}"
+										},
+										{
+											"key": "key",
+											"value": "{{invalidKey}}"
+										},
+										{
+											"key": "token",
+											"value": "{{token}}"
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{invalidBoardId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Lists on a Board with invalid BoardId",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "eb06b849-8b9d-4603-83c2-0275c2d0329c",
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"pm.test(\"Body with invalid string  \", function () {",
+											"    pm.expect(pm.response.text()).to.include(\"invalid\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "fc8e5630-edf9-49bc-923a-1ed48a8fc6e3",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/boards/:id/lists?key={{key}}&token={{token}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										":id",
+										"lists"
+									],
+									"query": [
+										{
+											"key": "key",
+											"value": "{{key}}"
+										},
+										{
+											"key": "token",
+											"value": "{{token}}"
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{invalidBoardId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Lists on a Board with Invalid Key",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "7615c9c7-b663-4449-a898-37e8734414bb",
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});",
+											"",
+											"pm.test(\"Body with invalid string  \", function () {",
+											"    pm.expect(pm.response.text()).to.include(\"invalid\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "b36382de-9d1b-4904-a720-16fc32d6039c",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/boards/:id/lists?key={{invalidKey}}&token={{token}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										":id",
+										"lists"
+									],
+									"query": [
+										{
+											"key": "key",
+											"value": "{{invalidKey}}"
+										},
+										{
+											"key": "token",
+											"value": "{{token}}"
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{boardId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Lists on a Board with invalid Token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "59770f39-5932-40ca-9955-06908f649bda",
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});",
+											"",
+											"pm.test(\"Body with invalid string  \", function () {",
+											"    pm.expect(pm.response.text()).to.include(\"invalid\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "8cddd947-070a-4954-a2a4-b8c83a712f1d",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/boards/:id/lists?key={{key}}&token={{invalidToken}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										":id",
+										"lists"
+									],
+									"query": [
+										{
+											"key": "key",
+											"value": "{{key}}"
+										},
+										{
+											"key": "token",
+											"value": "{{invalidToken}}"
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{boardId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Closed Lists with invalid BoardId",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "3607688c-ab06-4bcc-bf69-6ce533b374fb",
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"pm.test(\"Body with invalid string  \", function () {",
+											"    pm.expect(pm.response.text()).to.include(\"invalid\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "fcc9d58f-cf97-4be8-8b46-5c3c2314fb22",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/boards/:id/lists/closed?key={{key}}&token={{token}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										":id",
+										"lists",
+										"closed"
+									],
+									"query": [
+										{
+											"key": "key",
+											"value": "{{key}}"
+										},
+										{
+											"key": "token",
+											"value": "{{token}}"
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{invalidBoardId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Closed Lists with invalid Key",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "19aee2f8-c23d-40b4-8fbf-71bd373663fe",
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});",
+											"",
+											"pm.test(\"Body with invalid string  \", function () {",
+											"    pm.expect(pm.response.text()).to.include(\"invalid\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "da5caf2e-0eeb-4c93-ab52-69c6015470a6",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/boards/:id/lists/closed?key={{invalidKey}}&token={{token}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										":id",
+										"lists",
+										"closed"
+									],
+									"query": [
+										{
+											"key": "key",
+											"value": "{{invalidKey}}"
+										},
+										{
+											"key": "token",
+											"value": "{{token}}"
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{boardId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Closed Lists with invalid Token",
+							"id": "21a90af6-9e0b-4d7b-89c5-47bacc8fb432",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/boards/:id/lists/closed?key={{key}}&token={{invalidToken}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										":id",
+										"lists",
+										"closed"
+									],
+									"query": [
+										{
+											"key": "key",
+											"value": "{{key}}"
+										},
+										{
+											"key": "token",
+											"value": "{{invalidToken}}"
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{boardId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Label on a Board with invalid BoardId",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "152e2aad-4dca-487d-9a86-f711f02c8549",
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"pm.test(\"Body with invalid string  \", function () {",
+											"    pm.expect(pm.response.text()).to.include(\"invalid\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "c712c845-aa9d-49bc-9fae-e163041d691a",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/boards/:id/labels?name={{labelName}}&color={{labelColor}}&key={{key}}&token={{token}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										":id",
+										"labels"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "{{labelName}}"
+										},
+										{
+											"key": "color",
+											"value": "{{labelColor}}"
+										},
+										{
+											"key": "key",
+											"value": "{{key}}"
+										},
+										{
+											"key": "token",
+											"value": "{{token}}"
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{invalidBoardId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create a Label on a Board with invalid Key",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "fee579f1-fa83-41b0-afbd-19baf1fe8c56",
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});",
+											"",
+											"pm.test(\"Body with invalid string  \", function () {",
+											"    pm.expect(pm.response.text()).to.include(\"invalid\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "2c719ad0-9c3e-4dd5-9c53-d2e83a9381a3",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/boards/:id/labels?name={{labelName}}&color={{labelColor}}&key={{invalidKey}}&token={{token}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										":id",
+										"labels"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "{{labelName}}"
+										},
+										{
+											"key": "color",
+											"value": "{{labelColor}}"
+										},
+										{
+											"key": "key",
+											"value": "{{invalidKey}}"
+										},
+										{
+											"key": "token",
+											"value": "{{token}}"
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{invalidBoarId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create a Label on Board with Invalid Token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "2ca21cf4-e2d3-4ff3-9b57-22eab50c8f21",
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});",
+											"",
+											"pm.test(\"Body with invalid string  \", function () {",
+											"    pm.expect(pm.response.text()).to.include(\"invalid\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "77f28227-aa10-40fd-a46b-6aff43943160",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/boards/:id/labels?name={{labelName}}&color={{labelColor}}&key={{key}}&token={{invalidToken}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										":id",
+										"labels"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "{{labelName}}"
+										},
+										{
+											"key": "color",
+											"value": "{{labelColor}}"
+										},
+										{
+											"key": "key",
+											"value": "{{key}}"
+										},
+										{
+											"key": "token",
+											"value": "{{invalidToken}}"
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{boardId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Label on Board with no Params",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "6b07d6fb-f4c0-4b4b-b775-171e7739bdf0",
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"",
+											"pm.test(\"Body with invalid string  \", function () {",
+											"    pm.expect(pm.response.text()).to.include(\"invalid\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "042ef0ee-142a-414e-b036-e6f62988d228",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/boards/:id/labels?key={{key}}&token={{token}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										":id",
+										"labels"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "{{labelName}}",
+											"disabled": true
+										},
+										{
+											"key": "color",
+											"value": "{{labelColor}}",
+											"disabled": true
+										},
+										{
+											"key": "key",
+											"value": "{{key}}"
+										},
+										{
+											"key": "token",
+											"value": "{{token}}"
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{boardId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create a Label with Invalid Color",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "dfef3974-2a14-435a-8fc8-76b24a66868f",
+										"exec": [
+											"pm.environment.set(\"invalidLabelColor\", \"aASDASDFAS\");",
+											"let _labelName = 12345;",
+											"pm.environment.set(\"invalidLabelName\", _labelName);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "74ee5da6-49ab-43b5-9467-02f5286c0778",
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "5b6ee08c-d04c-4bd1-965a-1f16918b0bd1",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/boards/:id/labels?name={{labelName}}&color={{invalidlabelColor}}&key={{key}}&token={{token}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										":id",
+										"labels"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "{{labelName}}"
+										},
+										{
+											"key": "color",
+											"value": "{{invalidlabelColor}}"
+										},
+										{
+											"key": "key",
+											"value": "{{key}}"
+										},
+										{
+											"key": "token",
+											"value": "{{token}}"
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{boardId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create a Label with Invalid Name",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "f08ffd99-de6f-4930-af7b-40bc6f94a82c",
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {",
+											"    pm.response.to.have.status(404);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "57d078ee-ee7f-442c-9cec-dd62c93e0582",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/boards/:id/labels?name={{invalidLabelName}}&color={{labelColor}}&key={{key}}&token={{token}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										":id",
+										"labels"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "{{invalidLabelName}}"
+										},
+										{
+											"key": "color",
+											"value": "{{labelColor}}"
+										},
+										{
+											"key": "key",
+											"value": "{{key}}"
+										},
+										{
+											"key": "token",
+											"value": "{{token}}"
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Lists of labels with Invalid Token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "03117dbf-ed9a-4574-a75f-462c5a3fb008",
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});",
+											"",
+											"pm.test(\"Body with invalid string  \", function () {",
+											"    pm.expect(pm.response.text()).to.include(\"invalid\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "8990ce92-0e69-42ac-99e0-fb002156fedc",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/boards/:id/labels?key={{key}}&token={{invalidToken}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										":id",
+										"labels"
+									],
+									"query": [
+										{
+											"key": "key",
+											"value": "{{key}}"
+										},
+										{
+											"key": "token",
+											"value": "{{invalidToken}}"
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{boardId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Lists of labels with Invalid Key",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "3afc5422-318a-4e18-8713-f2ec4f816902",
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});",
+											"",
+											"pm.test(\"Body with invalid string  \", function () {",
+											"    pm.expect(pm.response.text()).to.include(\"invalid\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "bf7d3dd2-1e37-4b18-a8a1-23fa71e95e50",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/boards/:id/labels?key={{invalidKey}}&token={{invalidToken}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										":id",
+										"labels"
+									],
+									"query": [
+										{
+											"key": "key",
+											"value": "{{invalidKey}}"
+										},
+										{
+											"key": "token",
+											"value": "{{invalidToken}}"
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{boardId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Lists of Labels with Invalid BoardId",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "37b1be50-263f-4d00-a15c-da617d63b7ef",
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"pm.test(\"Body with invalid string  \", function () {",
+											"    pm.expect(pm.response.text()).to.include(\"invalid\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "78abcb9e-fcfa-4d80-8d9e-44310ab4a184",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/boards/:id/labels?key={{key}}&token={{token}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										":id",
+										"labels"
+									],
+									"query": [
+										{
+											"key": "key",
+											"value": "{{key}}"
+										},
+										{
+											"key": "token",
+											"value": "{{token}}"
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{invalidBoardId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get members of a Board with Invalid Board Id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "1bb8235d-3e9d-4390-b071-6ee7da3b5da7",
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"pm.test(\"Body with invalid string  \", function () {",
+											"    pm.expect(pm.response.text()).to.include(\"invalid\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "8774be11-4210-4f7c-9542-453898326d6e",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/boards/:id/members?key={{key}}&token={{token}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										":id",
+										"members"
+									],
+									"query": [
+										{
+											"key": "key",
+											"value": "{{key}}"
+										},
+										{
+											"key": "token",
+											"value": "{{token}}"
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{invalidBoardId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get members of a Board with invalid Key",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "5e1fb909-2d53-464b-b29b-016ca487c92e",
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});",
+											"",
+											"pm.test(\"Body with invalid string  \", function () {",
+											"    pm.expect(pm.response.text()).to.include(\"invalid\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "46157a13-321f-495d-8f2f-08db3f1b0f6a",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/boards/:id/members?key={{invalidKey}}&token={{token}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										":id",
+										"members"
+									],
+									"query": [
+										{
+											"key": "key",
+											"value": "{{invalidKey}}"
+										},
+										{
+											"key": "token",
+											"value": "{{token}}"
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{boardId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get members of a Board with Invalid Token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "dd1e558a-3b45-4da3-96fd-96f0b1e61188",
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});",
+											"",
+											"pm.test(\"Body with invalid string  \", function () {",
+											"    pm.expect(pm.response.text()).to.include(\"invalid\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "905fedfb-a4ea-4de0-88e0-5eae033bc860",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/boards/:id/members?key={{key}}&token={{invalidToken}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										":id",
+										"members"
+									],
+									"query": [
+										{
+											"key": "key",
+											"value": "{{key}}"
+										},
+										{
+											"key": "token",
+											"value": "{{invalidToken}}"
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{boardId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Cards on a Board with Invalid Token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "410b48a1-f86d-4c39-b76e-0ee6f4ebb25a",
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});",
+											"",
+											"pm.test(\"Body with invalid string  \", function () {",
+											"    pm.expect(pm.response.text()).to.include(\"invalid\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "5404e2fc-8596-4007-9e51-d493ef1558a6",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/boards/:id/cards?key={{key}}&token={{invalidToken}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										":id",
+										"cards"
+									],
+									"query": [
+										{
+											"key": "key",
+											"value": "{{key}}"
+										},
+										{
+											"key": "token",
+											"value": "{{invalidToken}}"
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{boardId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Cards on a Board with Invalid BoardId",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "3c0ad4a7-9d9a-4630-a2ce-bb80f05d88a0",
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {",
+											"    pm.response.to.have.status(400);",
+											"});",
+											"",
+											"pm.test(\"Body with invalid string  \", function () {",
+											"    pm.expect(pm.response.text()).to.include(\"invalid\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "47de0e4a-510a-4f73-9c6b-f35dbd01bed4",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/boards/:id/cards?key={{key}}&token={{token}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										":id",
+										"cards"
+									],
+									"query": [
+										{
+											"key": "key",
+											"value": "{{key}}"
+										},
+										{
+											"key": "token",
+											"value": "{{token}}"
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{invalidBoardId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Cards on a Board with invalid Key",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "d006612c-f067-4344-b472-81b0a16940cc",
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});",
+											"",
+											"pm.test(\"Body with invalid string  \", function () {",
+											"    pm.expect(pm.response.text()).to.include(\"invalid\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "161fb2a1-554a-41c6-96ee-e954daa50382",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/boards/:id/cards?key={{invalidKey}}&token={{token}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										":id",
+										"cards"
+									],
+									"query": [
+										{
+											"key": "key",
+											"value": "{{invalidKey}}"
+										},
+										{
+											"key": "token",
+											"value": "{{token}}"
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{boardId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete a Board with Invalid Key",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "6a839206-b9e1-4a2a-b772-8f2b8e3b6290",
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});",
+											"",
+											"pm.test(\"Body with invalid string  \", function () {",
+											"    pm.expect(pm.response.text()).to.include(\"invalid\");",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "846fdadd-13cf-43a9-b3f4-27f92048288c",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/boards/:id?key={{invalidKey}}&token={{token}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										":id"
+									],
+									"query": [
+										{
+											"key": "key",
+											"value": "{{invalidKey}}"
+										},
+										{
+											"key": "token",
+											"value": "{{token}}"
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{boardId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Created Board",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "daf290e1-1f09-4e4f-9bcc-5153ed68ca71",
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "8f319749-9d03-4664-82c6-cb653507d54d",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/boards/:id?key={{key}}&token={{token}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										":id"
+									],
+									"query": [
+										{
+											"key": "key",
+											"value": "{{key}}"
+										},
+										{
+											"key": "token",
+											"value": "{{token}}"
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{boardId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Deleted Board",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "e9d008e5-12ae-4fd6-b6d6-b1c2bef81972",
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {",
+											"    pm.response.to.have.status(404);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"id": "2eedd300-d049-4e6c-8120-b373d43c765a",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://api.trello.com/1/boards/:id?key={{key}}&token={{token}}",
+									"protocol": "https",
+									"host": [
+										"api",
+										"trello",
+										"com"
+									],
+									"path": [
+										"1",
+										"boards",
+										":id"
+									],
+									"query": [
+										{
+											"key": "key",
+											"value": "{{key}}"
+										},
+										{
+											"key": "token",
+											"value": "{{token}}"
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{boardId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"id": "07be3252-7815-4a5a-8b7a-6458e2c64c6c"
+				}
+			],
+			"id": "120f0b08-6307-40e6-9225-d79be866c6f1"
+		}
+	]
+}
